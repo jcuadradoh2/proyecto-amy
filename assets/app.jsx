@@ -621,7 +621,6 @@ function Tour({ items, tags, onExit }) {
   return (
     <div className="tour-stage no-select" role="dialog" aria-label="Tour virtual">
       <audio ref={audioRef} src="media/tour-music.mp3" loop preload="auto" style={{ display: 'none' }} />
-      {/* Two slides for crossfade effect: previous frame fades while current rises */}
       <div className="tour-slide" data-state="active" key={cur.id}>
         {isVideo ? (
           <video
@@ -632,7 +631,10 @@ function Tour({ items, tags, onExit }) {
             playsInline
           />
         ) : (
-          <img src={cur.src} alt="" />
+          <>
+            <img className="tour-bg" src={cur.src} alt="" aria-hidden="true" />
+            <img className="tour-fg" src={cur.src} alt="" />
+          </>
         )}
       </div>
 
