@@ -214,9 +214,71 @@ function romanYear(n) {
 }
 
 /* ════════════════════════════════════════════════════════════════
+   Lock screen
+   ═══════════════════════════════════════════════════════════════ */
+const _H = '2d7aeba500efbe193ce084ea7669e3a6c37ce96c4b042836d57726364dfe27ed';
+
+async function _digest(s) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function LockScreen({ onUnlock }) {
+  const [val, setVal] = useState('');
+  const [err, setErr] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [shake, setShake] = useState(false);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!val.trim()) return;
+    setBusy(true);
+    const h = await _digest(val.trim().toLowerCase());
+    if (h === _H) {
+      sessionStorage.setItem('_a', '1');
+      onUnlock();
+    } else {
+      setErr(true);
+      setShake(true);
+      setVal('');
+      setBusy(false);
+      setTimeout(() => setShake(false), 600);
+    }
+  }
+
+  return (
+    <div className="lock-screen">
+      <div className="lock-inner">
+        <div className="brand lock-brand">amy</div>
+        <div className="rule-gold" style={{ maxWidth: 120, margin: '1.5rem auto' }}></div>
+        <p className="display-italic lock-hint">ingresa tus iniciales para continuar</p>
+        <form onSubmit={handleSubmit} className={`lock-form${shake ? ' lock-shake' : ''}`}>
+          <input
+            className="lock-input"
+            type="text"
+            maxLength={8}
+            value={val}
+            onChange={e => { setVal(e.target.value); setErr(false); }}
+            placeholder="_ _ _ _"
+            autoFocus
+            autoComplete="off"
+            spellCheck={false}
+          />
+          {err && <p className="lock-err eyebrow">iniciales incorrectas · inténtalo de nuevo</p>}
+          <button type="submit" className="btn-line lock-btn" disabled={busy || !val.trim()}>
+            <span>{busy ? '···' : 'entrar'}</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════
    APP root
    ═══════════════════════════════════════════════════════════════ */
 function App() {
+  const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem('_a') === '1');
   const [scene, setScene] = useState('cover');
   const [lightboxIdx, setLightboxIdx] = useState(null);
   const [activeCat, setActiveCat] = useState('todos');
@@ -242,6 +304,8 @@ function App() {
 
   const openLightbox = useCallback((globalIdx) => setLightboxIdx(globalIdx), []);
   const closeLightbox = useCallback(() => setLightboxIdx(null), []);
+
+  if (!unlocked) return <LockScreen onUnlock={() => setUnlocked(true)} />;
 
   return (
     <React.Fragment>
