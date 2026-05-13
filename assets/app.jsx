@@ -556,6 +556,18 @@ function Tour({ items, tags, onExit }) {
   const tickRef = useRef(null);
   const startRef = useRef(Date.now());
   const videoRef = useRef(null);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (playing) { audio.play().catch(() => {}); } else { audio.pause(); }
+  }, [playing]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    return () => { if (audio) { audio.pause(); audio.currentTime = 0; } };
+  }, []);
 
   const cur = items[idx];
   const isVideo = cur?.type === 'video';
@@ -608,6 +620,7 @@ function Tour({ items, tags, onExit }) {
 
   return (
     <div className="tour-stage no-select" role="dialog" aria-label="Tour virtual">
+      <audio ref={audioRef} src="media/tour-music.mp3" loop preload="auto" style={{ display: 'none' }} />
       {/* Two slides for crossfade effect: previous frame fades while current rises */}
       <div className="tour-slide" data-state="active" key={cur.id}>
         {isVideo ? (
