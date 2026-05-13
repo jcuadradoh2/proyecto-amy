@@ -259,12 +259,12 @@ body {
 
 /* ——————————————————— TOUR (slideshow) ——————————————————— */
 @keyframes kenburns-a {
-  0%   { transform: scale(1.04) translate3d(-0.5%, 0.5%, 0); }
-  100% { transform: scale(1.12) translate3d(0.5%, -0.5%, 0); }
+  0%   { transform: scale(1.00) translate3d(-0.3%, 0.3%, 0); }
+  100% { transform: scale(1.03) translate3d(0.3%, -0.3%, 0); }
 }
 @keyframes kenburns-b {
-  0%   { transform: scale(1.12) translate3d(0.5%, -0.5%, 0); }
-  100% { transform: scale(1.04) translate3d(-0.5%, 0.5%, 0); }
+  0%   { transform: scale(1.03) translate3d(0.3%, -0.3%, 0); }
+  100% { transform: scale(1.00) translate3d(-0.3%, 0.3%, 0); }
 }
 
 .tour-stage {
@@ -283,7 +283,7 @@ body {
 .tour-slide[data-state="active"] { opacity: 1; }
 .tour-slide img, .tour-slide video {
   width: 100%; height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transform-origin: center center;
   animation: kenburns-a 14s ease-in-out both;
   will-change: transform;
@@ -456,7 +456,7 @@ body {
 .cover-aside video {
   width: 100%; height: 100%;
   object-fit: cover;
-  filter: saturate(0.92) contrast(1.02);
+  filter: blur(3px) saturate(0.92) contrast(1.02);
   animation: kenburns-a 22s ease-in-out infinite alternate;
 }
 .cover-aside::after {
