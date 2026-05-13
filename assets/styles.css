@@ -266,39 +266,43 @@ body {
 }
 .tour-slide {
   position: absolute; inset: 0;
-  display: grid; place-items: center;
+  overflow: hidden;
   opacity: 0;
   transition: opacity 1.4s ease;
-  overflow: hidden;
 }
 .tour-slide[data-state="active"] { opacity: 1; }
 
-/* blurred background fills the margins */
+/* fondo desenfocado: misma imagen cubriendo todo el slide + blur */
 .tour-bg {
-  position: absolute; inset: -24px;
-  width: calc(100% + 48px);
-  height: calc(100% + 48px);
+  position: absolute;
+  top: -40px; right: -40px; bottom: -40px; left: -40px;
   object-fit: cover;
-  filter: blur(22px) brightness(0.45) saturate(0.7);
+  filter: blur(30px) brightness(0.38) saturate(0.55);
+  z-index: 0;
 }
 
-/* clear foreground image, centered, never cropped */
+/* imagen principal: centrada, sin recorte, sin zoom */
 .tour-fg {
-  position: relative;
-  z-index: 1;
-  max-width: 92%;
-  max-height: 88vh;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 90%;
+  max-height: 85vh;
   width: auto;
   height: auto;
   object-fit: contain;
-  box-shadow: 0 8px 48px rgba(0,0,0,0.5);
+  z-index: 1;
+  box-shadow: 0 6px 40px rgba(0,0,0,0.65);
 }
 
-/* video spans full slide */
+/* video: contiene el frame sin recortar */
 .tour-slide video {
-  position: relative; z-index: 1;
-  width: 100%; height: 100%;
-  object-fit: contain;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 100%; max-height: 100%;
+  width: auto; height: auto;
+  z-index: 1;
 }
 
 .tour-vignette {
