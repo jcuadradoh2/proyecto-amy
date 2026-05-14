@@ -1,6 +1,6 @@
 {
-  "generated": "2026-05-14T02:40:33.447Z",
-  "count": 92,
+  "generated": "2026-05-14T02:42:42.604Z",
+  "count": 91,
   "items": [
     {
       "id": "amy-41086-jpg",
@@ -57,14 +57,6 @@
       "type": "image",
       "size": 99994,
       "mtime": "2026-05-13T21:32:36.294Z"
-    },
-    {
-      "id": "amy-43069-jpg",
-      "src": "media/amy/43069.JPG",
-      "filename": "43069.JPG",
-      "type": "image",
-      "size": 61074,
-      "mtime": "2026-05-13T21:32:36.319Z"
     },
     {
       "id": "amy-25a9c031-93a7-4aad-9031-ee18ad96b305-jpg",
