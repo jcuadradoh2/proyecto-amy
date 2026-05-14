@@ -577,6 +577,7 @@ function Cover({
 /* ════════════════════════════════════════════════════════════════
    Gallery (masonry)
    ═══════════════════════════════════════════════════════════════ */
+const PAGE_SIZE = 24;
 function Gallery({
   items,
   filteredItems,
@@ -588,8 +589,14 @@ function Gallery({
   status,
   progress
 }) {
+  const [visible, setVisible] = useState(PAGE_SIZE);
   const indexOf = useCallback(id => items.findIndex(x => x.id === id), [items]);
+  useEffect(() => {
+    setVisible(PAGE_SIZE);
+  }, [activeCat]);
   if (!items || items.length === 0) return /*#__PURE__*/React.createElement(EmptyState, null);
+  const shown = filteredItems.slice(0, visible);
+  const hasMore = visible < filteredItems.length;
   return /*#__PURE__*/React.createElement("section", {
     className: "max-w-[1600px] mx-auto px-6 lg:px-12 pb-32"
   }, /*#__PURE__*/React.createElement("div", {
@@ -605,7 +612,7 @@ function Gallery({
     progress: progress
   }), /*#__PURE__*/React.createElement("div", {
     className: "eyebrow tabular"
-  }, filteredItems.length, " / ", items.length, " piezas"))), /*#__PURE__*/React.createElement("div", {
+  }, shown.length, " / ", filteredItems.length, " piezas"))), /*#__PURE__*/React.createElement("div", {
     className: "rule-fine mb-8"
   }), /*#__PURE__*/React.createElement("div", {
     className: "flex flex-wrap gap-2 mb-12"
@@ -618,16 +625,21 @@ function Gallery({
     className: "chip-count tabular"
   }, counts[c] || 0)))), filteredItems.length === 0 ? /*#__PURE__*/React.createElement("p", {
     className: "display-italic text-2xl text-muted my-20"
-  }, T.no_results, ".") : /*#__PURE__*/React.createElement("div", {
+  }, T.no_results, ".") : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "masonry"
-  }, filteredItems.map((it, i) => /*#__PURE__*/React.createElement(Tile, {
+  }, shown.map((it, i) => /*#__PURE__*/React.createElement(Tile, {
     key: it.id,
     item: it,
     n: indexOf(it.id) + 1,
     cat: tags[it.id],
     onOpen: () => onOpen(indexOf(it.id)),
     delay: Math.min(i, 12) * 0.05
-  }))));
+  }))), hasMore && /*#__PURE__*/React.createElement("div", {
+    className: "flex justify-center mt-16"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn-line",
+    onClick: () => setVisible(v => v + PAGE_SIZE)
+  }, /*#__PURE__*/React.createElement("span", null, "cargar m\xE1s \xB7 ", filteredItems.length - visible, " restantes")))));
 }
 function Tile({
   item,
@@ -646,7 +658,7 @@ function Tile({
   }, isVideo ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("video", {
     className: "tile-video",
     src: item.src,
-    preload: "metadata",
+    preload: "none",
     muted: true,
     playsInline: true
   }), /*#__PURE__*/React.createElement("span", {
@@ -1288,7 +1300,7 @@ function Promesa({
       fontSize: '1rem',
       animation: 'fade .6s both'
     }
-  }, "\u2764 prometemos no dejarnos \u2764")))), /*#__PURE__*/React.createElement("section", {
+  }, "\u2764 prometemos no olvidarnos \u2764")))), /*#__PURE__*/React.createElement("section", {
     style: {
       padding: '0 1.5rem 4rem',
       display: 'flex',

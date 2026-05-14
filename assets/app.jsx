@@ -515,14 +515,21 @@ function Cover({ items, onEnter, onTour, count, generated }) {
 /* ════════════════════════════════════════════════════════════════
    Gallery (masonry)
    ═══════════════════════════════════════════════════════════════ */
+const PAGE_SIZE = 24;
+
 function Gallery({ items, filteredItems, tags, counts, activeCat, setActiveCat, onOpen, status, progress }) {
+  const [visible, setVisible] = useState(PAGE_SIZE);
   const indexOf = useCallback((id) => items.findIndex(x => x.id === id), [items]);
+
+  useEffect(() => { setVisible(PAGE_SIZE); }, [activeCat]);
 
   if (!items || items.length === 0) return <EmptyState />;
 
+  const shown = filteredItems.slice(0, visible);
+  const hasMore = visible < filteredItems.length;
+
   return (
     <section className="max-w-[1600px] mx-auto px-6 lg:px-12 pb-32">
-      {/* Header strip */}
       <div className="flex flex-wrap items-end justify-between gap-6 mt-6 mb-10">
         <div>
           <div className="eyebrow">archivo · {T.brand}</div>
@@ -531,14 +538,13 @@ function Gallery({ items, filteredItems, tags, counts, activeCat, setActiveCat, 
         <div className="flex flex-col items-end gap-2">
           <ClassifierStatus status={status} progress={progress} />
           <div className="eyebrow tabular">
-            {filteredItems.length} / {items.length} piezas
+            {shown.length} / {filteredItems.length} piezas
           </div>
         </div>
       </div>
 
       <div className="rule-fine mb-8"></div>
 
-      {/* Filter chips */}
       <div className="flex flex-wrap gap-2 mb-12">
         {CAT_ORDER.filter(c => c === 'todos' || (counts[c] || 0) > 0).map(c => (
           <button
@@ -552,22 +558,30 @@ function Gallery({ items, filteredItems, tags, counts, activeCat, setActiveCat, 
         ))}
       </div>
 
-      {/* Masonry */}
       {filteredItems.length === 0 ? (
         <p className="display-italic text-2xl text-muted my-20">{T.no_results}.</p>
       ) : (
-        <div className="masonry">
-          {filteredItems.map((it, i) => (
-            <Tile
-              key={it.id}
-              item={it}
-              n={indexOf(it.id) + 1}
-              cat={tags[it.id]}
-              onOpen={() => onOpen(indexOf(it.id))}
-              delay={Math.min(i, 12) * 0.05}
-            />
-          ))}
-        </div>
+        <>
+          <div className="masonry">
+            {shown.map((it, i) => (
+              <Tile
+                key={it.id}
+                item={it}
+                n={indexOf(it.id) + 1}
+                cat={tags[it.id]}
+                onOpen={() => onOpen(indexOf(it.id))}
+                delay={Math.min(i, 12) * 0.05}
+              />
+            ))}
+          </div>
+          {hasMore && (
+            <div className="flex justify-center mt-16">
+              <button className="btn-line" onClick={() => setVisible(v => v + PAGE_SIZE)}>
+                <span>cargar más · {filteredItems.length - visible} restantes</span>
+              </button>
+            </div>
+          )}
+        </>
       )}
     </section>
   );
@@ -585,7 +599,7 @@ function Tile({ item, n, cat, onOpen, delay }) {
           <video
             className="tile-video"
             src={item.src}
-            preload="metadata"
+            preload="none"
             muted
             playsInline
           />
@@ -1010,7 +1024,7 @@ function Promesa({ onCierre, onBack }) {
               </button>
               {promised && (
                 <p className="display-italic" style={{ color:'rgba(201,168,76,.85)', fontSize:'1rem', animation:'fade .6s both' }}>
-                  ❤ prometemos no dejarnos ❤
+                  ❤ prometemos no olvidarnos ❤
                 </p>
               )}
             </div>
