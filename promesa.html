@@ -621,7 +621,7 @@ function App() {
                maxWidth: 480,
                margin: '0 auto'
              }}>
-            Esa promesa no tiene fecha de vencimiento. No importan las distancias, los días difíciles ni las dudas que a veces se cuelan sin permiso — la promesa sigue intacta, sellada con un meñique y todo el corazón que tenemos.
+            Ahora que las cosas han cambiado entre nosotros y decidiste ponerle fin a nuestra historia, prometo seguir amándote el resto de mi vida, prometo jamás olvidarte y si en algún momento decides volver, aquí estaré esperándote.
           </p>
 
           <div className="mt-10 relative z-10 flex justify-center">
@@ -644,6 +644,43 @@ function App() {
               </p>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* ── Galería de dos fotos ── */}
+      <section className="px-6 pb-24 flex flex-wrap items-start justify-center gap-10 lg:gap-16">
+        <div style={{
+          background: '#faf5ec',
+          padding: '0.9rem 0.9rem 2.6rem',
+          boxShadow: '0 2px 8px rgba(0,0,0,.4), 0 14px 44px rgba(0,0,0,.5)',
+          transform: 'rotate(-2.5deg)',
+          transition: 'transform .6s cubic-bezier(.34,1.56,.64,1)',
+          maxWidth: 260, width: '100%',
+          cursor: 'default'
+        }}
+          onMouseEnter={e => e.currentTarget.style.transform = 'rotate(0deg) scale(1.03)'}
+          onMouseLeave={e => e.currentTarget.style.transform = 'rotate(-2.5deg)'}>
+          <img src="media/amy/IMG_0529_2.PNG" alt="" style={{ width:'100%', display:'block', objectFit:'cover', aspectRatio:'3/4' }} />
+          <p style={{ fontFamily:'"Instrument Serif",Georgia,serif', fontStyle:'italic', fontSize:'.78rem', color:'#4a3a2e', textAlign:'center', marginTop:'.6rem', opacity:.65 }}>
+            un momento nuestro.
+          </p>
+        </div>
+
+        <div style={{
+          background: '#faf5ec',
+          padding: '0.9rem 0.9rem 2.6rem',
+          boxShadow: '0 2px 8px rgba(0,0,0,.4), 0 14px 44px rgba(0,0,0,.5)',
+          transform: 'rotate(2deg)',
+          transition: 'transform .6s cubic-bezier(.34,1.56,.64,1)',
+          maxWidth: 260, width: '100%',
+          cursor: 'default'
+        }}
+          onMouseEnter={e => e.currentTarget.style.transform = 'rotate(0deg) scale(1.03)'}
+          onMouseLeave={e => e.currentTarget.style.transform = 'rotate(2deg)'}>
+          <img src="media/amy/IMG002.jpeg" alt="" style={{ width:'100%', display:'block', objectFit:'cover', aspectRatio:'3/4' }} />
+          <p style={{ fontFamily:'"Instrument Serif",Georgia,serif', fontStyle:'italic', fontSize:'.78rem', color:'#4a3a2e', textAlign:'center', marginTop:'.6rem', opacity:.65 }}>
+            guardado en el alma.
+          </p>
         </div>
       </section>
 

@@ -975,7 +975,7 @@ function Promesa({ onCierre, onBack }) {
             <div className="dark-rule" style={{ margin:'1.8rem auto', width:100, position:'relative' }}></div>
 
             <p style={{ fontFamily:'"Instrument Serif",Georgia,serif', fontStyle:'italic', fontSize:'clamp(.95rem,2.6vw,1.2rem)', color:'rgba(242,196,204,.72)', lineHeight:1.85, maxWidth:460, margin:'0 auto', position:'relative' }}>
-              Esa promesa no tiene fecha de vencimiento. No importan las distancias, los días difíciles ni las dudas que se cuelan sin permiso — la promesa sigue intacta, sellada con un meñique y todo el corazón que tenemos.
+              Ahora que las cosas han cambiado entre nosotros y decidiste ponerle fin a nuestra historia, prometo seguir amándote el resto de mi vida, prometo jamás olvidarte y si en algún momento decides volver, aquí estaré esperándote.
             </p>
 
             <div style={{ marginTop:'2.2rem', position:'relative', display:'flex', flexDirection:'column', alignItems:'center', gap:'1rem' }}>
@@ -990,6 +990,23 @@ function Promesa({ onCierre, onBack }) {
               )}
             </div>
           </div>
+        </section>
+
+        {/* Galería de dos fotos */}
+        <section style={{ padding:'0 1.5rem 4rem', display:'flex', flexWrap:'wrap', alignItems:'flex-start', justifyContent:'center', gap:'clamp(1.5rem,4vw,3.5rem)' }}>
+          {[
+            { src:'media/amy/IMG_0529_2.PNG', cap:'un momento nuestro.', rot:'-2.5deg' },
+            { src:'media/amy/IMG002.jpeg',    cap:'guardado en el alma.', rot:'2deg' }
+          ].map(({ src, cap, rot }) => (
+            <div key={src}
+              className="polaroid-dark"
+              style={{ transform:`rotate(${rot})`, maxWidth:240 }}
+              onMouseEnter={e => e.currentTarget.style.transform='rotate(0deg) scale(1.03)'}
+              onMouseLeave={e => e.currentTarget.style.transform=`rotate(${rot})`}>
+              <img src={src} alt="" style={{ objectFit:'cover', aspectRatio:'3/4' }} />
+              <p className="polaroid-dark-cap">{cap}</p>
+            </div>
+          ))}
         </section>
 
         {/* Ir al cierre */}
