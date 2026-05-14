@@ -649,6 +649,23 @@ function Tile({
   delay
 }) {
   const isVideo = item.type === 'video';
+  const videoRef = useRef(null);
+  useEffect(() => {
+    if (!isVideo) return;
+    const el = videoRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        el.preload = 'metadata';
+        obs.disconnect();
+      }
+    }, {
+      rootMargin: '200px',
+      threshold: 0
+    });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [isVideo]);
   return /*#__PURE__*/React.createElement("figure", {
     className: "tile tile-enter no-select",
     style: {
@@ -656,6 +673,7 @@ function Tile({
     },
     onClick: onOpen
   }, isVideo ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("video", {
+    ref: videoRef,
     className: "tile-video",
     src: item.src,
     preload: "none",

@@ -589,6 +589,22 @@ function Gallery({ items, filteredItems, tags, counts, activeCat, setActiveCat, 
 
 function Tile({ item, n, cat, onOpen, delay }) {
   const isVideo = item.type === 'video';
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (!isVideo) return;
+    const el = videoRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        el.preload = 'metadata';
+        obs.disconnect();
+      }
+    }, { rootMargin: '200px', threshold: 0 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [isVideo]);
+
   return (
     <figure
       className="tile tile-enter no-select"
@@ -597,6 +613,7 @@ function Tile({ item, n, cat, onOpen, delay }) {
       {isVideo ? (
         <React.Fragment>
           <video
+            ref={videoRef}
             className="tile-video"
             src={item.src}
             preload="none"
