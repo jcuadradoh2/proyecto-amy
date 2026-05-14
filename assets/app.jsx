@@ -97,10 +97,25 @@ function useManifest() {
 }
 
 /* ──────────────── classifier hook ────────────────
-   Loads MobileNet once, classifies each image, caches results. */
+   Desktop only: loads TF.js + MobileNet dynamically and classifies.
+   Mobile: uses localStorage cache only, skips model load entirely. */
+
+const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    if (document.querySelector(`script[src="${src}"]`)) { resolve(); return; }
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
 function useClassifier(items) {
   const [tags, setTags] = useState(() => loadCache());
-  const [status, setStatus] = useState('idle'); // idle | loading | classifying | done
+  const [status, setStatus] = useState('idle');
   const [progress, setProgress] = useState({ done: 0, total: 0 });
   const cancelled = useRef(false);
 
@@ -109,28 +124,41 @@ function useClassifier(items) {
     cancelled.current = false;
 
     const pending = items.filter(it => it.type === 'image' && !tags[it.id]);
+
+    // Tag videos and finish early if nothing needs classification
+    const next = { ...tags };
+    let dirty = false;
+    for (const it of items) {
+      if (it.type === 'video' && !next[it.id]) { next[it.id] = 'videos'; dirty = true; }
+    }
+
     if (pending.length === 0) {
       setStatus('done');
-      // ensure all videos have a tag
-      const next = { ...tags };
-      let dirty = false;
-      for (const it of items) {
-        if (it.type === 'video' && !next[it.id]) { next[it.id] = 'videos'; dirty = true; }
-      }
       if (dirty) { setTags(next); saveCache(next); }
+      return;
+    }
+
+    // Mobile: skip model, mark pending as 'momentos' from cache
+    if (isMobile) {
+      for (const it of pending) next[it.id] = 'momentos';
+      setTags(next);
+      saveCache(next);
+      setStatus('done');
       return;
     }
 
     (async () => {
       setStatus('loading');
       try {
-        const model = await mobilenet.load({ version: 2, alpha: 1.0 });
+        await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js');
+        await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js');
+        if (cancelled.current) return;
+
+        const model = await mobilenet.load({ version: 2, alpha: 0.5 });
         if (cancelled.current) return;
         setStatus('classifying');
         setProgress({ done: 0, total: pending.length });
 
-        const next = { ...tags };
-        // also pre-tag videos
         for (const it of items) {
           if (it.type === 'video' && !next[it.id]) next[it.id] = 'videos';
         }
@@ -139,8 +167,7 @@ function useClassifier(items) {
         for (const item of pending) {
           if (cancelled.current) return;
           try {
-            const cat = await classifyOne(model, item.src);
-            next[item.id] = cat;
+            next[item.id] = await classifyOne(model, item.src);
           } catch {
             next[item.id] = 'momentos';
           }
@@ -153,8 +180,6 @@ function useClassifier(items) {
         setStatus('done');
       } catch (e) {
         console.warn('classifier failed', e);
-        // graceful fallback: mark everything as 'momentos'
-        const next = { ...tags };
         for (const it of items) {
           if (!next[it.id]) next[it.id] = it.type === 'video' ? 'videos' : 'momentos';
         }

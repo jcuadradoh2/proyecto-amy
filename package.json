@@ -1,0 +1,28 @@
+{
+  "name": "proyecto-amy",
+  "version": "1.0.0",
+  "description": "Tour virtual estático para GitHub Pages. Galería editorial + slideshow cinematográfico con clasificación de imágenes por IA 100 % en el navegador (TensorFlow.js + MobileNet, sin API keys ni backend).",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx babel assets/app.jsx --out-file assets/app.js",
+    "watch": "npx babel assets/app.jsx --out-file assets/app.js --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcuadradoh2/proyecto-amy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jcuadradoh2/proyecto-amy/issues"
+  },
+  "homepage": "https://github.com/jcuadradoh2/proyecto-amy#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.28.6",
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.5",
+    "@babel/preset-react": "^7.28.5"
+  }
+}
