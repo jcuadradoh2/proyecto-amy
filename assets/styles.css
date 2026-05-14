@@ -218,17 +218,28 @@ body {
 }
 .tile-play {
   position: absolute;
-  top: 0.9rem; right: 0.9rem;
-  width: 2rem; height: 2rem;
-  border-radius: 999px;
-  background: rgba(245,237,224,0.92);
-  color: var(--ink);
+  inset: 0;
   display: grid; place-items: center;
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 600;
+  pointer-events: none;
+}
+.tile-play::after {
+  content: '';
+  width: 3rem; height: 3rem;
+  border-radius: 999px;
+  background: rgba(245,237,224,0.88);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: grid; place-items: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  transition: transform .25s ease, background .25s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231f1813'%3E%3Cpath d='M8 5v14l11-7z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 1.1rem;
+}
+.tile:hover .tile-play::after {
+  transform: scale(1.1);
+  background-color: rgba(245,237,224,1);
 }
 
 /* ——————————————————— SCENE ENTRANCES ——————————————————— */

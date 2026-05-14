@@ -680,8 +680,9 @@ function Tile({
     muted: true,
     playsInline: true
   }), /*#__PURE__*/React.createElement("span", {
-    className: "tile-play"
-  }, "\u25B6 ver")) : /*#__PURE__*/React.createElement("img", {
+    className: "tile-play",
+    "aria-label": "reproducir"
+  })) : /*#__PURE__*/React.createElement("img", {
     className: "tile-img",
     src: item.src,
     alt: "",

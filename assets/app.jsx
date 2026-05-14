@@ -620,7 +620,7 @@ function Tile({ item, n, cat, onOpen, delay }) {
             muted
             playsInline
           />
-          <span className="tile-play">▶ ver</span>
+          <span className="tile-play" aria-label="reproducir"></span>
         </React.Fragment>
       ) : (
         <img className="tile-img" src={item.src} alt="" loading="lazy" decoding="async" />
