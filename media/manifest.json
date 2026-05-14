@@ -1,6 +1,6 @@
 {
-  "generated": "2026-05-14T02:23:31.708Z",
-  "count": 99,
+  "generated": "2026-05-14T02:33:39.326Z",
+  "count": 93,
   "items": [
     {
       "id": "amy-41086-jpg",
@@ -483,14 +483,6 @@
       "mtime": "2026-05-13T21:32:54.929Z"
     },
     {
-      "id": "amy-idg-20250907-200700-647-jpg",
-      "src": "media/amy/IDG_20250907_200700_647.JPG",
-      "filename": "IDG_20250907_200700_647.JPG",
-      "type": "image",
-      "size": 2554676,
-      "mtime": "2026-05-13T21:32:55.983Z"
-    },
-    {
       "id": "amy-img-0429-jpg",
       "src": "media/amy/IMG_0429.jpg",
       "filename": "IMG_0429.jpg",
@@ -531,14 +523,6 @@
       "mtime": "2026-05-13T21:32:59.779Z"
     },
     {
-      "id": "amy-idg-20250907-200719-062-jpg",
-      "src": "media/amy/IDG_20250907_200719_062.JPG",
-      "filename": "IDG_20250907_200719_062.JPG",
-      "type": "image",
-      "size": 2593327,
-      "mtime": "2026-05-13T21:32:59.854Z"
-    },
-    {
       "id": "amy-4b47d17c-3fa6-40fc-93d3-7e4671b160c5-mp4",
       "src": "media/amy/4b47d17c-3fa6-40fc-93d3-7e4671b160c5.MP4",
       "filename": "4b47d17c-3fa6-40fc-93d3-7e4671b160c5.MP4",
@@ -577,30 +561,6 @@
       "type": "image",
       "size": 3331906,
       "mtime": "2026-05-13T21:33:04.099Z"
-    },
-    {
-      "id": "amy-idg-20250906-213306-296-jpg",
-      "src": "media/amy/IDG_20250906_213306_296.JPG",
-      "filename": "IDG_20250906_213306_296.JPG",
-      "type": "image",
-      "size": 2781694,
-      "mtime": "2026-05-13T21:33:04.464Z"
-    },
-    {
-      "id": "amy-idg-20250906-213152-224-jpg",
-      "src": "media/amy/IDG_20250906_213152_224.JPG",
-      "filename": "IDG_20250906_213152_224.JPG",
-      "type": "image",
-      "size": 3384932,
-      "mtime": "2026-05-13T21:35:17.017Z"
-    },
-    {
-      "id": "amy-idg-20250906-213229-325-jpg",
-      "src": "media/amy/IDG_20250906_213229_325.JPG",
-      "filename": "IDG_20250906_213229_325.JPG",
-      "type": "image",
-      "size": 2785860,
-      "mtime": "2026-05-13T21:37:23.651Z"
     },
     {
       "id": "amy-idg-20250906-172027-588-jpg",
@@ -737,14 +697,6 @@
       "type": "image",
       "size": 4554482,
       "mtime": "2026-05-13T21:58:48.300Z"
-    },
-    {
-      "id": "amy-idg-20250906-213202-159-jpg",
-      "src": "media/amy/IDG_20250906_213202_159.JPG",
-      "filename": "IDG_20250906_213202_159.JPG",
-      "type": "image",
-      "size": 5850190,
-      "mtime": "2026-05-13T22:01:03.621Z"
     },
     {
       "id": "amy-15a68bd1-0c82-4d1d-b74e-bb8554a960ef-mp4",
