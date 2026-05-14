@@ -1,6 +1,6 @@
 {
-  "generated": "2026-05-14T02:33:39.326Z",
-  "count": 93,
+  "generated": "2026-05-14T02:40:33.447Z",
+  "count": 92,
   "items": [
     {
       "id": "amy-41086-jpg",
@@ -41,14 +41,6 @@
       "type": "image",
       "size": 45852,
       "mtime": "2026-05-13T21:32:36.129Z"
-    },
-    {
-      "id": "amy-9644b135-7a17-4a43-891a-ee4a42b4085f-jpg",
-      "src": "media/amy/9644b135-7a17-4a43-891a-ee4a42b4085f.JPG",
-      "filename": "9644b135-7a17-4a43-891a-ee4a42b4085f.JPG",
-      "type": "image",
-      "size": 57204,
-      "mtime": "2026-05-13T21:32:36.179Z"
     },
     {
       "id": "amy-56821-mp4",
