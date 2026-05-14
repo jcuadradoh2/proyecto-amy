@@ -1,6 +1,6 @@
 {
-  "generated": "2026-05-14T08:49:40.128Z",
-  "count": 119,
+  "generated": "2026-05-14T09:04:47.512Z",
+  "count": 115,
   "items": [
     {
       "id": "amy-41086-jpg",
@@ -9,14 +9,6 @@
       "type": "image",
       "size": 38785,
       "mtime": "2026-05-13T21:32:35.659Z"
-    },
-    {
-      "id": "amy-0be77af1-ea68-4fe9-b6fe-a6e4d5f845d2-2-jpg",
-      "src": "media/amy/0be77af1-ea68-4fe9-b6fe-a6e4d5f845d2 2.JPG",
-      "filename": "0be77af1-ea68-4fe9-b6fe-a6e4d5f845d2 2.JPG",
-      "type": "image",
-      "size": 64785,
-      "mtime": "2026-05-13T21:32:35.734Z"
     },
     {
       "id": "amy-0be77af1-ea68-4fe9-b6fe-a6e4d5f845d2-jpg",
@@ -81,14 +73,6 @@
       "type": "video",
       "size": 704789,
       "mtime": "2026-05-13T21:32:38.739Z"
-    },
-    {
-      "id": "amy-46718-jpg",
-      "src": "media/amy/46718.JPG",
-      "filename": "46718.JPG",
-      "type": "image",
-      "size": 148264,
-      "mtime": "2026-05-13T21:32:38.859Z"
     },
     {
       "id": "amy-46719-jpg",
@@ -411,28 +395,12 @@
       "mtime": "2026-05-14T08:43:23.911Z"
     },
     {
-      "id": "amy-6e76e8dd-660b-4df9-b9a4-d0ceb66928c5-jpg",
-      "src": "media/amy/6e76e8dd-660b-4df9-b9a4-d0ceb66928c5.JPG",
-      "filename": "6e76e8dd-660b-4df9-b9a4-d0ceb66928c5.JPG",
-      "type": "image",
-      "size": 178120,
-      "mtime": "2026-05-14T08:43:23.977Z"
-    },
-    {
       "id": "amy-84712e1f-b81a-4613-a899-aa95a4e442af-jpg",
       "src": "media/amy/84712e1f-b81a-4613-a899-aa95a4e442af.JPG",
       "filename": "84712e1f-b81a-4613-a899-aa95a4e442af.JPG",
       "type": "image",
       "size": 168223,
       "mtime": "2026-05-14T08:43:24.042Z"
-    },
-    {
-      "id": "amy-9a710452-d9c2-436d-9c73-fcdde353c6ab-jpg",
-      "src": "media/amy/9a710452-d9c2-436d-9c73-fcdde353c6ab.JPG",
-      "filename": "9a710452-d9c2-436d-9c73-fcdde353c6ab.JPG",
-      "type": "image",
-      "size": 139633,
-      "mtime": "2026-05-14T08:43:24.103Z"
     },
     {
       "id": "amy-9d299400-84e1-49e9-8d31-aab4cae8dc75-jpg",
@@ -489,14 +457,6 @@
       "type": "image",
       "size": 65046,
       "mtime": "2026-05-14T08:43:25.653Z"
-    },
-    {
-      "id": "amy-idg-20250907-200634-613-jpg",
-      "src": "media/amy/IDG_20250907_200634_613.JPG",
-      "filename": "IDG_20250907_200634_613.JPG",
-      "type": "image",
-      "size": 124811,
-      "mtime": "2026-05-14T08:43:26.141Z"
     },
     {
       "id": "amy-img-0086-jpg",
@@ -953,6 +913,14 @@
       "type": "image",
       "size": 124089,
       "mtime": "2026-05-14T08:44:03.455Z"
+    },
+    {
+      "id": "amy-idg-20250907-200634-6132-jpg",
+      "src": "media/amy/IDG_20250907_200634_6132.JPG",
+      "filename": "IDG_20250907_200634_6132.JPG",
+      "type": "image",
+      "size": 92159,
+      "mtime": "2026-05-14T09:03:58.667Z"
     }
   ]
 }
