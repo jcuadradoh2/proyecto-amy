@@ -17,6 +17,7 @@ const T = {
   nav_cover: 'inicio',
   nav_gallery: 'galería',
   nav_tour: 'tour',
+  nav_promesa: 'promesa',
   empty_title: 'aún no hay recuerdos guardados',
   empty_body: 'agrega tus fotos y videos a la carpeta',
   empty_step: 'luego, desde la raíz del proyecto, ejecuta',
@@ -341,6 +342,14 @@ function App() {
         <Tour items={items} tags={tags} onExit={() => setScene('gallery')} />
       )}
 
+      {scene === 'promesa' && (
+        <Promesa onCierre={() => setScene('cierre')} onBack={() => setScene('cover')} />
+      )}
+
+      {scene === 'cierre' && (
+        <Cierre onBack={() => setScene('promesa')} />
+      )}
+
       {lightboxIdx !== null && items[lightboxIdx] && (
         <Lightbox
           items={items}
@@ -387,6 +396,14 @@ function Header({ scene, setScene, hasItems }) {
             disabled={!hasItems}
             style={{ opacity: hasItems ? 1 : 0.35 }}>
             {T.nav_tour}
+          </button>
+          <button
+            data-active={scene === 'promesa' || scene === 'cierre'}
+            className="btn-ghost"
+            onClick={() => setScene('promesa')}
+            style={{ color: (scene === 'promesa' || scene === 'cierre') ? 'var(--rose-deep)' : undefined,
+                     borderBottomColor: (scene === 'promesa' || scene === 'cierre') ? 'var(--rose-deep)' : undefined }}>
+            {T.nav_promesa}
           </button>
         </nav>
 
@@ -793,6 +810,272 @@ function Footer() {
         <div className="eyebrow tabular">{todayLabel()}</div>
       </div>
     </footer>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PetalCanvas — canvas lluvia de pétalos (shared)
+   ═══════════════════════════════════════════════════════════════ */
+function PetalCanvas() {
+  const ref = useRef(null);
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let raf;
+    const COLORS = ['#c4536a','#e8899a','#f2c4cc','#a03050','#d4607a','#b84060','#f0a8b4','#fad0d8','#de8095','#7b1d30'];
+    let W, H, petals = [];
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    function mk() {
+      return {
+        x: Math.random() * W * 1.2 - W * 0.1, y: -20 - Math.random() * 60,
+        size: 5 + Math.random() * 11, color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        vy: 0.6 + Math.random() * 1.1, vx: -0.3 + Math.random() * 0.6,
+        rot: Math.random() * Math.PI * 2, drot: -0.013 + Math.random() * 0.026,
+        sw: Math.random() * Math.PI * 2, dsw: 0.008 + Math.random() * 0.01,
+        amp: 0.3 + Math.random() * 0.7, alpha: 0.38 + Math.random() * 0.5,
+        sy: 0.45 + Math.random() * 0.5,
+      };
+    }
+    for (let i = 0; i < 50; i++) { const p = mk(); p.y = Math.random() * H; petals.push(p); }
+    function draw(p) {
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.scale(1, p.sy);
+      const s = p.size;
+      ctx.beginPath();
+      ctx.moveTo(0, -s);
+      ctx.bezierCurveTo(s*.8, -s*.4, s*.9, s*.5, 0, s);
+      ctx.bezierCurveTo(-s*.9, s*.5, -s*.8, -s*.4, 0, -s);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(0, -s*.8);
+      ctx.quadraticCurveTo(s*.08, 0, 0, s*.8);
+      ctx.strokeStyle = 'rgba(255,255,255,0.09)';
+      ctx.lineWidth = .4;
+      ctx.stroke();
+      ctx.restore();
+    }
+    function frame() {
+      ctx.clearRect(0, 0, W, H);
+      if (petals.length < 65 && Math.random() < .3) petals.push(mk());
+      for (let i = petals.length - 1; i >= 0; i--) {
+        const p = petals[i];
+        p.sw += p.dsw; p.x += p.vx + Math.sin(p.sw) * p.amp;
+        p.y += p.vy; p.rot += p.drot;
+        draw(p);
+        if (p.y > H + 30 || p.x < -60 || p.x > W + 60) petals.splice(i, 1);
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    frame();
+    return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', resize); };
+  }, []);
+  return <canvas ref={ref} style={{ position:'fixed', inset:0, pointerEvents:'none', zIndex:61 }} />;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Promesa scene
+   ═══════════════════════════════════════════════════════════════ */
+function Promesa({ onCierre, onBack }) {
+  const [promised, setPromised] = useState(false);
+  const btnRef = useRef(null);
+
+  function spawnHearts(cx, cy) {
+    const emojis = ['❤','🩷','💗','💖','💕'];
+    for (let i = 0; i < 13; i++) {
+      const el = document.createElement('div');
+      el.className = 'heart-float';
+      const dx = -80 + Math.random() * 160;
+      const dy = -100 + Math.random() * 60;
+      el.textContent = emojis[i % emojis.length];
+      el.style.cssText = `left:${cx+dx}px;top:${cy+dy}px;font-size:${0.85+Math.random()*0.9}rem;animation-delay:${i*0.045}s`;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1500 + i * 50);
+    }
+  }
+
+  function handlePromise() {
+    const btn = btnRef.current;
+    if (btn) {
+      const r = btn.getBoundingClientRect();
+      spawnHearts(r.left + r.width / 2, r.top + r.height / 2);
+    }
+    setPromised(true);
+  }
+
+  return (
+    <div className="scene-dark">
+      <PetalCanvas />
+
+      <button onClick={onBack} className="dark-nav-btn"
+        style={{ position:'fixed', top:'1.4rem', left:'clamp(1.25rem,5vw,3rem)', zIndex:70 }}>
+        ← volver
+      </button>
+
+      <div className="scene-dark-content">
+
+        {/* Hero */}
+        <section style={{ minHeight:'70vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', textAlign:'center', padding:'6rem 1.5rem 3rem' }}>
+          <p className="dark-eyebrow" style={{ marginBottom:'2rem', animation:'rise .9s .1s both' }}>
+            una promesa · para siempre
+          </p>
+          <h1 className="display" style={{ fontSize:'clamp(3.2rem,13vw,9rem)', color:'#f5ede0', lineHeight:'.93', textShadow:'0 0 60px rgba(196,83,106,.2)', animation:'rise 1s .25s both' }}>
+            la
+          </h1>
+          <h1 className="display-italic" style={{ fontSize:'clamp(3rem,12vw,8.5rem)', color:'#e8899a', marginTop:'-0.06em', lineHeight:'.93', textShadow:'0 0 60px rgba(196,83,106,.25)', animation:'rise 1s .4s both' }}>
+            promesa
+          </h1>
+          <div className="dark-rule" style={{ width:120, margin:'2rem auto', animation:'fade .8s .7s both' }}></div>
+          <p className="display-italic" style={{ fontSize:'clamp(1rem,2.8vw,1.5rem)', color:'rgba(242,196,204,.75)', maxWidth:440, lineHeight:1.65, animation:'rise .9s .85s both' }}>
+            «algunas cosas no necesitan firma,<br/>solo dos meñiques entrelazados.»
+          </p>
+        </section>
+
+        {/* Screenshot + texto */}
+        <section style={{ padding:'2rem 1.5rem 4rem', display:'flex', flexWrap:'wrap', alignItems:'center', justifyContent:'center', gap:'clamp(2rem,6vw,5rem)' }}>
+          <div className="polaroid-dark">
+            <img src="media/pinki_promise.jpeg" alt="La promesa" />
+            <p className="polaroid-dark-cap">«no te voy a dejar, amorcito.»</p>
+          </div>
+
+          <div style={{ maxWidth:400, textAlign:'left' }}>
+            <p className="dark-eyebrow" style={{ marginBottom:'1.2rem' }}>lo que dijiste · lo que prometiste</p>
+            <div style={{ fontFamily:'"Instrument Serif",Georgia,serif', fontStyle:'italic', fontSize:'clamp(1.3rem,3.5vw,1.85rem)', lineHeight:1.65, color:'#f2c4cc' }}>
+              <p style={{ marginBottom:'.8rem' }}>"No te voy a dejar amorcito."</p>
+              <p style={{ color:'#e8899a' }}>Hicimos <em>pinki promesa</em>.</p>
+            </div>
+            <div className="dark-rule" style={{ margin:'1.5rem 0', maxWidth:160 }}></div>
+            <p style={{ fontFamily:'"Instrument Serif",Georgia,serif', fontStyle:'italic', fontSize:'1rem', color:'rgba(245,237,224,.5)', lineHeight:1.8 }}>
+              Las palabras que se dicen a las 8:30 de la noche, cuando la verdad pesa más que cualquier otra cosa, son las que más importan.
+            </p>
+          </div>
+        </section>
+
+        {/* Promise box */}
+        <section style={{ padding:'0 1.5rem 5rem', display:'flex', justifyContent:'center' }}>
+          <div className="promise-box" style={{ maxWidth:640, width:'100%', padding:'clamp(2rem,5vw,3.5rem)', textAlign:'center', borderRadius:2 }}>
+            <div className="corner-dec tl"></div>
+            <div className="corner-dec tr"></div>
+            <div className="corner-dec bl"></div>
+            <div className="corner-dec br"></div>
+
+            <p className="dark-eyebrow" style={{ marginBottom:'1.5rem', position:'relative' }}>algo que nunca debes olvidar</p>
+
+            <p className="display-italic" style={{ fontSize:'clamp(1.3rem,3.8vw,2rem)', color:'#f5ede0', lineHeight:1.72, position:'relative' }}>
+              Y aunque el tiempo pase y el mundo cambie, hay algo que llevamos grabado en el alma:{' '}
+              <span style={{ color:'#e8899a' }}>prometimos no dejarnos.</span>
+            </p>
+
+            <div className="dark-rule" style={{ margin:'1.8rem auto', width:100, position:'relative' }}></div>
+
+            <p style={{ fontFamily:'"Instrument Serif",Georgia,serif', fontStyle:'italic', fontSize:'clamp(.95rem,2.6vw,1.2rem)', color:'rgba(242,196,204,.72)', lineHeight:1.85, maxWidth:460, margin:'0 auto', position:'relative' }}>
+              Esa promesa no tiene fecha de vencimiento. No importan las distancias, los días difíciles ni las dudas que se cuelan sin permiso — la promesa sigue intacta, sellada con un meñique y todo el corazón que tenemos.
+            </p>
+
+            <div style={{ marginTop:'2.2rem', position:'relative', display:'flex', flexDirection:'column', alignItems:'center', gap:'1rem' }}>
+              <button ref={btnRef} onClick={handlePromise} className="btn-promise">
+                <span style={{ fontSize:'1rem' }}>🤙</span>
+                <span style={{ position:'relative', zIndex:1 }}>{promised ? '· promesa renovada ·' : '· renovar la promesa ·'}</span>
+              </button>
+              {promised && (
+                <p className="display-italic" style={{ color:'rgba(201,168,76,.85)', fontSize:'1rem', animation:'fade .6s both' }}>
+                  ❤ prometemos no dejarnos ❤
+                </p>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* Ir al cierre */}
+        <div style={{ textAlign:'center', paddingBottom:'5rem' }}>
+          <div className="dark-rule" style={{ width:60, margin:'0 auto 2.5rem' }}></div>
+          <button onClick={onCierre} className="btn-promise" style={{ gap:'.75rem' }}>
+            <span style={{ position:'relative', zIndex:1 }}>continuar</span>
+            <span style={{ fontSize:'1rem', position:'relative', zIndex:1 }}>→</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Cierre scene — pantalla final
+   ═══════════════════════════════════════════════════════════════ */
+function Cierre({ onBack }) {
+  return (
+    <div className="scene-dark" style={{ overflow:'hidden' }}>
+      <PetalCanvas />
+
+      <button onClick={onBack} className="dark-nav-btn"
+        style={{ position:'fixed', top:'1.4rem', left:'clamp(1.25rem,5vw,3rem)', zIndex:70 }}>
+        ← volver
+      </button>
+
+      <div className="scene-dark-content" style={{ minHeight:'100vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', textAlign:'center', padding:'5rem 1.5rem' }}>
+
+        {/* Ornamento superior */}
+        <div style={{ marginBottom:'3rem', animation:'fade 1.2s .2s both' }}>
+          <p className="dark-eyebrow" style={{ marginBottom:'.9rem' }}>fin · y comienzo</p>
+          <div className="dark-rule" style={{ width:80, margin:'0 auto' }}></div>
+        </div>
+
+        {/* Frase principal */}
+        <h1 className="display-italic cierre-glow" style={{
+          fontSize:'clamp(2rem,6.5vw,5rem)',
+          color:'#f5ede0',
+          lineHeight:1.25,
+          maxWidth:720,
+          letterSpacing:'-.01em',
+        }}>
+          <span className="cierre-line" style={{ animationDelay:'.3s', display:'block' }}>
+            «Gracias por todos
+          </span>
+          <span className="cierre-line" style={{ animationDelay:'.7s', display:'block', color:'#e8899a' }}>
+            estos momentos
+          </span>
+          <span className="cierre-line" style={{ animationDelay:'1.1s', display:'block' }}>
+            que pasé junto a tí.»
+          </span>
+        </h1>
+
+        {/* Rule */}
+        <div className="dark-rule" style={{ width:120, margin:'3rem auto', animation:'fade 1s 1.8s both' }}></div>
+
+        {/* Sub-frase */}
+        <p style={{
+          fontFamily:'"Instrument Serif",Georgia,serif',
+          fontStyle:'italic',
+          fontSize:'clamp(1rem,2.8vw,1.45rem)',
+          color:'rgba(242,196,204,.6)',
+          maxWidth:480, lineHeight:1.8,
+          animation:'rise 1s 2s both',
+        }}>
+          Cada fotografía guarda un pedazo de lo que somos — de lo que construimos juntos, sin prisa, con amor.
+        </p>
+
+        {/* Firma */}
+        <div style={{ marginTop:'3.5rem', animation:'fade 1s 2.6s both' }}>
+          <div className="dark-rule" style={{ width:48, margin:'0 auto 1.4rem' }}></div>
+          <p style={{ fontFamily:'"Fraunces",Georgia,serif', fontVariationSettings:'"SOFT" 80', fontSize:'.68rem', letterSpacing:'.28em', textTransform:'lowercase', color:'rgba(201,168,76,.55)' }}>
+            amy · MMXXV
+          </p>
+        </div>
+
+        {/* Corazón decorativo pulsante */}
+        <div style={{ marginTop:'2.5rem', animation:'fade 1s 3s both' }}>
+          <span style={{ fontSize:'2rem', display:'inline-block', animation:'pulse 2.4s ease-in-out infinite' }}>❤</span>
+        </div>
+
+      </div>
+    </div>
   );
 }
 
