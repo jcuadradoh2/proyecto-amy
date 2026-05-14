@@ -344,7 +344,7 @@ body {
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   max-width: 90%;
-  max-height: 85vh;
+  max-height: min(80vh, calc(100vh - 9rem));
   width: auto;
   height: auto;
   object-fit: contain;
@@ -365,6 +365,7 @@ body {
 .tour-vignette {
   position: absolute; inset: 0;
   pointer-events: none;
+  z-index: 2;
   background:
     radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%),
     linear-gradient(180deg, rgba(0,0,0,0.25), transparent 25%, transparent 65%, rgba(0,0,0,0.55));
@@ -373,10 +374,11 @@ body {
 .tour-meta {
   position: absolute;
   left: clamp(1.5rem, 5vw, 4rem);
+  right: clamp(8rem, 22vw, 14rem);
   bottom: clamp(2rem, 6vh, 4rem);
   color: var(--paper);
-  max-width: 36rem;
   pointer-events: none;
+  z-index: 3;
 }
 .tour-meta .num {
   font-family: 'Fraunces', serif;
@@ -411,6 +413,7 @@ body {
   height: 1px;
   background: rgba(245,237,224,0.18);
   overflow: hidden;
+  z-index: 3;
 }
 .tour-progress::after {
   content: '';
@@ -424,11 +427,12 @@ body {
   position: absolute;
   right: clamp(1.5rem, 5vw, 4rem);
   bottom: clamp(2rem, 6vh, 4rem);
-  display: flex; gap: 1rem; align-items: center;
+  display: flex; gap: 0.75rem; align-items: center;
   color: var(--paper);
+  z-index: 3;
 }
 .tour-btn {
-  width: 2.6rem; height: 2.6rem;
+  width: 2.75rem; height: 2.75rem;
   border-radius: 999px;
   border: 1px solid rgba(245,237,224,0.32);
   background: transparent;
@@ -438,9 +442,10 @@ body {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.85rem;
   transition: background .3s, border-color .3s;
+  touch-action: manipulation;
 }
 .tour-btn:hover { background: rgba(245,237,224,0.08); border-color: var(--gold-2); }
-.tour-btn.lg { width: 3.4rem; height: 3.4rem; }
+.tour-btn.lg { width: 3.5rem; height: 3.5rem; }
 
 .tour-exit {
   position: absolute;
@@ -454,6 +459,8 @@ body {
   background: transparent; border: none; cursor: pointer;
   padding: 0.5rem 0.25rem;
   border-bottom: 1px solid rgba(245,237,224,0.32);
+  z-index: 3;
+  touch-action: manipulation;
 }
 .tour-exit:hover { color: var(--paper); border-color: var(--gold-2); }
 
@@ -517,6 +524,11 @@ body {
 .lightbox-close:hover { color: var(--paper); border-color: var(--gold-2); }
 
 /* ——————————————————— COVER IMAGE ASIDE ——————————————————— */
+@keyframes kenburns-cover {
+  0%   { transform: scale(1.00); }
+  100% { transform: scale(1.06) translate(1%, -1%); }
+}
+
 .cover-aside {
   position: relative;
   aspect-ratio: 3 / 4;
@@ -528,7 +540,7 @@ body {
   width: 100%; height: 100%;
   object-fit: cover;
   filter: blur(3px) saturate(0.92) contrast(1.02);
-  animation: kenburns-a 22s ease-in-out infinite alternate;
+  animation: kenburns-cover 22s ease-in-out infinite alternate;
 }
 .cover-aside::after {
   content: '';
@@ -568,6 +580,8 @@ body {
   border-radius: 4px;
   color: var(--ink-soft);
   display: inline-block;
+  word-break: break-all;
+  max-width: 100%;
 }
 
 /* ——————————————————— STATUS PILL ——————————————————— */

@@ -438,13 +438,13 @@ function Cover({ items, onEnter, onTour, count, generated }) {
             )}
           </div>
 
-          <div className="flex items-center gap-8 mt-16 eyebrow tabular">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-12 eyebrow tabular">
             <span>{romanYear(new Date().getFullYear())}</span>
             <span aria-hidden>·</span>
             <span>{count} {count === 1 ? T.piece : 'piezas'}</span>
             {generated && (<>
-              <span aria-hidden>·</span>
-              <span>actualizado {new Date(generated).toLocaleDateString('es', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+              <span aria-hidden className="hidden sm:inline">·</span>
+              <span className="hidden sm:inline">actualizado {new Date(generated).toLocaleDateString('es', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
             </>)}
           </div>
         </div>
@@ -773,7 +773,7 @@ function Lightbox({ items, index, tags, onClose, onNav }) {
             {cat}
           </div>
         </div>
-        <div className="display-italic" style={{ fontSize: '1.5rem', color: 'rgba(245,237,224,0.9)', textAlign: 'right', maxWidth: '40%' }}>
+        <div className="display-italic" style={{ fontSize: 'clamp(0.85rem, 2.5vw, 1.5rem)', color: 'rgba(245,237,224,0.9)', textAlign: 'right', maxWidth: '50%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {cur.filename.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ')}
         </div>
       </div>
